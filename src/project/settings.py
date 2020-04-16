@@ -1,3 +1,4 @@
+from os import getenv
 from pathlib import Path
 
 import dj_database_url
@@ -94,10 +95,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "project.wsgi.application"
 
+DATABASE_URL = _settings.DATABASE_URL
+if _settings.ENV_FOR_DYNACONF == "heroku":
+    DATABASE_URL = getenv("DATABASE_URL")
+
 DATABASES = {
-    "default": dj_database_url.parse(
-        _settings.DATABASE_URL, conn_max_age=AGE_1MINUTE * 10
-    ),
+    "default": dj_database_url.parse(DATABASE_URL, conn_max_age=AGE_1MINUTE * 10),
 }
 
 if CACHING:

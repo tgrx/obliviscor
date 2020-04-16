@@ -16,9 +16,14 @@ development:
 
 
 production:
+  MODE_CACHING: true
+  MODE_DEBUG: false
+  MODE_PROFILING: false
+
+
+heroku:
   ALLOWED_HOSTS:
-    - 127.0.0.1
-    - localhost
+    - .obliviscor.herokuapp.com
   MODE_CACHING: true
   MODE_DEBUG: false
   MODE_PROFILING: false

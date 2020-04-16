@@ -1,14 +1,16 @@
 HERE := $(shell pwd)
-MYSQL := $(shell which mysql) --user root --password
-PIPENV := $(shell which pipenv)
 VENV := $(shell pipenv --venv)
 
 ifeq ($(origin PIPENV_ACTIVE), undefined)
 	PY := pipenv run
 endif
 
+DBCLIENT := $(shell which mysql) --user root --password
 ifeq ($(ENV_FOR_DYNACONF), travis)
-	MYSQL := $(shell which mysql) --user root
+	DBCLIENT := $(shell which mysql) --user root
+else ifeq ($(ENV_FOR_DYNACONF), heroku)
+	# TODO: figure out what to do in that case
+	DBCLIENT :=
 endif
 
 
@@ -45,7 +47,7 @@ migrate:
 
 .PHONY: resetdb
 resetdb:
-	${MYSQL} < ${HERE}/ddl/reset_db.sql
+	${DBCLIENT} < ${HERE}/ddl/reset_db.sql
 
 
 .PHONY: initdb
