@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link href="{{ static('css/base.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ static('css/responsive.css') }}" rel="stylesheet" type="text/css">
+    {% block custom_styles %}{% endblock %}
+    <title>{% block title %}XXX{% endblock %} :: {{ project_name }}</title>
+</head>
+
+<body>
+
+<header>
+    <h1>{% block header %}{% endblock %}</h1>
+    <nav>
+        {% with ns = request.resolver_match.namespace %}
+            <ul>
+                <li><a class="{% if ns.startswith('target') %}active{% endif %}"
+                       href="{{ url('target:index') }}">Target</a>
+                </li>
+            </ul>
+        {% endwith %}
+    </nav>
+</header>
+
+<main>
+    {% block main %}{% endblock %}
+</main>
+
+<footer>
+    <p>Copyright (C) Alexander Sidorov 2020</p>
+    <p><a href="mailto:a375296648709@gmail.com">email</a></p>
+    <p><a href="https://t.me/alexander.sidorov">telegram</a></p>
+    <p><a href="https://www.linkedin.com/in/alexnsidorov/">linkedin</a></p>
+</footer>
+
+</body>
+
+</html>

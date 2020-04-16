@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200;400;600&display=swap');
+
+:root {
+    --color-bg: white;
+    --height-header: 120px;
+    --color-text: black;
+    --size-text: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+}
+
+body {
+    font-family: 'Dosis', sans-serif;
+    font-size: var(--size-text);
+    margin: 0;
+    min-width: 300px;
+}
+
+header {
+    align-content: flex-start;
+    background-color: var(--color-bg);
+    border-bottom: 1px solid var(--color-bg);
+    display: flex;
+    flex-wrap: wrap;
+    height: var(--height-header);
+    opacity: 0.9;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+header * {
+    align-items: flex-start;
+    display: inline-block;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-around;
+}
+
+nav {
+    align-content: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    padding-right: 40px;
+}
+
+nav * li {
+    padding: 20px;
+}
+
+nav * a {
+    text-decoration: none;
+}
+
+nav * a.active {
+    text-decoration: overline;
+}
+
+nav * a:hover {
+    text-decoration: underline;
+}
+
+main {
+    margin-left: 20px;
+    margin-top: calc(var(--height-header) + 30px);
+}
+
+article {
+    align-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    margin-left: 20px;
+    margin-right: 40px;
+    padding: 10px 20px;
+}
+
+article > * {
+    flex-grow: 1;
+}
+
+article > p {
+    padding: 10px 20px;
+}
+
+article > p, h2, h3, h4 {
+    flex-basis: 100%;
+}
+
+section {
+    margin-bottom: 20px;
+    margin-right: 20px;
+    max-width: 550px;
+    min-width: 300px;
+    padding-left: 20px;
+    padding-right: 10px;
+    width: 500px;
+}
+
+footer {
+    align-content: flex-start;
+    align-items: flex-start;
+    background-color: #5b80b2;
+    border-top: 1px solid var(--color-bg);
+    display: flex;
+    flex-wrap: wrap;
+    font-size: calc(var(--size-text) * 0.8);
+    justify-content: space-between;
+    padding-bottom: 20px;
+    padding-left: 20px;
+    width: 100%;
+}
+
+footer > * {
+    flex-grow: 1;
+}

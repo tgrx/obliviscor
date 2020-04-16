@@ -1,0 +1,3 @@
+DROP DATABASE IF EXISTS test_obliviscor;
+DROP DATABASE IF EXISTS obliviscor;
+CREATE DATABASE obliviscor;

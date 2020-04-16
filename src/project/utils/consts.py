@@ -1,0 +1,8 @@
+AGE_1MINUTE = 60
+AGE_1HOUR = AGE_1MINUTE * 60
+AGE_1DAY = AGE_1HOUR * 24
+AGE_1MONTH = AGE_1DAY * 30
+
+MSQ = "Europe/Minsk"
+
+PROJECT_NAME = "obliviscor"

@@ -1,0 +1,30 @@
+dist: xenial
+language: python
+
+services:
+  - mysql
+
+env:
+  global:
+    - ENV_FOR_DYNACONF="travis"
+    - OBLIVISCOR_DATABASE_URL="mysql://root@localhost/obliviscor"
+
+install:
+  - pip install pipenv --upgrade
+  - make venv static
+
+before_script:
+  - make resetdb
+
+script:
+  - make test
+
+after_success:
+  - codecov
+
+cache: pip
+
+jobs:
+  include:
+    - stage: test
+      python: '3.8'

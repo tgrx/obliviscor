@@ -1,0 +1,38 @@
+default:
+  ALLOWED_HOSTS: []
+  DATABASE_URL: ""
+  MODE_CACHING: false
+  MODE_DEBUG: false
+  MODE_PROFILING: false
+  SECRET_KEY: ""
+  SENTRY_DSN: ""
+
+
+development:
+  MODE_CACHING: false
+  MODE_DEBUG: true
+  MODE_PROFILING: false
+  SECRET_KEY: "1"
+
+
+production:
+  ALLOWED_HOSTS:
+    - 127.0.0.1
+    - localhost
+  MODE_CACHING: true
+  MODE_DEBUG: false
+  MODE_PROFILING: false
+
+
+test:
+  MODE_CACHING: true
+  MODE_DEBUG: true
+  MODE_PROFILING: false
+  SECRET_KEY: "1"
+
+
+travis:
+  MODE_CACHING: true
+  MODE_DEBUG: true
+  MODE_PROFILING: false
+  SECRET_KEY: "1"

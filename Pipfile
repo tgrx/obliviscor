@@ -1,0 +1,35 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+black = "==19.10b0"
+codecov = "*"
+coverage = "*"
+django-silk = "*"
+freezegun = "*"
+httpie = "*"
+ipython = "*"
+isort = "*"
+line-profiler = "*"
+pudb = "*"
+
+[packages]
+delorean = "*"
+dj-database-url = "*"
+django = {extras = ["bcrypt"],version = "*"}
+django-bmemcached = "*"
+django-filter = "*"
+djangorestframework = "*"
+dynaconf = {extras = ["yaml"],version = "*"}
+gunicorn = "*"
+jinja2 = "*"
+markdown = "*"
+mysqlclient = "*"
+sentry-sdk = "*"
+uvicorn = "*"
+whitenoise = "*"
+
+[requires]
+python_version = "3.8"
