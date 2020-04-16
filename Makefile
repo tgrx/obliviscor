@@ -8,9 +8,11 @@ endif
 DBCLIENT := $(shell which mysql) --user root --password
 ifeq ($(ENV_FOR_DYNACONF), travis)
 	DBCLIENT := $(shell which mysql) --user root
+	PY :=
 else ifeq ($(ENV_FOR_DYNACONF), heroku)
 	# TODO: figure out what to do in that case
 	DBCLIENT :=
+	PY :=
 endif
 
 
