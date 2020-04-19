@@ -181,6 +181,6 @@ EMAIL_PORT = _settings.EMAIL_PORT
 EMAIL_USE_SSL = _settings.EMAIL_USE_SSL
 EMAIL_USE_TLS = _settings.EMAIL_USE_TLS
 
-SITE_ID = _settings.SIDE_ID
+SITE_ID = _settings.SITE_ID
 
 EMAIL_FROM = _settings.EMAIL_FROM
