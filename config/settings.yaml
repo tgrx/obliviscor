@@ -21,7 +21,7 @@ development:
   MODE_DEBUG: true
   MODE_PROFILING: false
   SECRET_KEY: "1"
-  SIDE_ID: 1
+  SITE_ID: 1
 
 
 production:
@@ -44,7 +44,7 @@ test:
   MODE_DEBUG: true
   MODE_PROFILING: false
   SECRET_KEY: "1"
-  SIDE_ID: 1
+  SITE_ID: 1
 
 
 travis:
@@ -53,4 +53,4 @@ travis:
   MODE_DEBUG: true
   MODE_PROFILING: false
   SECRET_KEY: "1"
-  SIDE_ID: 1
+  SITE_ID: 1
