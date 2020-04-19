@@ -34,4 +34,4 @@ pythonpath = _src_dir.as_posix()
 reload = False  # TODO: dynaconf
 timeout = 30
 worker_class = "uvicorn.workers.UvicornWorker"
-workers = multiprocessing.cpu_count() * 2 + 1  # XXX hahaha classic
+workers = 4  # multiprocessing.cpu_count() * 2 + 1  # XXX hahaha classic
