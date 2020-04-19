@@ -2,6 +2,7 @@ from os import getenv
 from pathlib import Path
 
 import dj_database_url
+from django.urls import reverse_lazy
 from dynaconf import settings as _settings
 
 from project.utils.consts import AGE_1DAY
@@ -30,8 +31,10 @@ INSTALLED_APPS_ORDERED = {
     30: "django.contrib.sessions",
     40: "django.contrib.messages",
     50: "django.contrib.staticfiles",
+    60: "django.contrib.sites",
     # --- my applications ---
     1000: "applications.target.apps.TargetConfig",
+    2000: "applications.onboarding.apps.OnboardingConfig",
 }
 
 if PROFILING:
@@ -48,6 +51,7 @@ MIDDLEWARE_ORDERED = {
     50: "django.contrib.auth.middleware.AuthenticationMiddleware",
     60: "django.contrib.messages.middleware.MessageMiddleware",
     70: "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    80: "django.contrib.sites.middleware.CurrentSiteMiddleware",
 }
 
 if PROFILING:
@@ -159,3 +163,24 @@ if not DEBUG:
         integrations=[DjangoIntegration()],
         send_default_pii=True,
     )
+
+LOGIN_URL = reverse_lazy("onboarding:sign_in")
+LOGIN_REDIRECT_URL = reverse_lazy("target:index")
+
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+]
+
+EMAIL_HOST = _settings.EMAIL_HOST
+EMAIL_HOST_PASSWORD = _settings.EMAIL_HOST_PASSWORD
+EMAIL_HOST_USER = _settings.EMAIL_HOST_USER
+EMAIL_PORT = _settings.EMAIL_PORT
+EMAIL_USE_SSL = _settings.EMAIL_USE_SSL
+EMAIL_USE_TLS = _settings.EMAIL_USE_TLS
+
+SITE_ID = _settings.SIDE_ID
+
+EMAIL_FROM = _settings.EMAIL_FROM

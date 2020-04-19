@@ -1,11 +1,19 @@
 default:
   ALLOWED_HOSTS: []
   DATABASE_URL: ""
+  EMAIL_FROM: ""
+  EMAIL_HOST: ""
+  EMAIL_HOST_PASSWORD: ""
+  EMAIL_HOST_USER: ""
+  EMAIL_PORT: 0
+  EMAIL_USE_SSL: false
+  EMAIL_USE_TLS: false
   MODE_CACHING: false
   MODE_DEBUG: false
   MODE_PROFILING: false
   SECRET_KEY: ""
   SENTRY_DSN: ""
+  SITE_ID: 0
 
 
 development:
@@ -13,6 +21,7 @@ development:
   MODE_DEBUG: true
   MODE_PROFILING: false
   SECRET_KEY: "1"
+  SIDE_ID: 1
 
 
 production:
@@ -30,14 +39,18 @@ heroku:
 
 
 test:
+  EMAIL_FROM: "test@test.name"
   MODE_CACHING: true
   MODE_DEBUG: true
   MODE_PROFILING: false
   SECRET_KEY: "1"
+  SIDE_ID: 1
 
 
 travis:
+  EMAIL_FROM: "test@test.name"
   MODE_CACHING: true
   MODE_DEBUG: true
   MODE_PROFILING: false
   SECRET_KEY: "1"
+  SIDE_ID: 1

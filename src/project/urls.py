@@ -9,6 +9,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # --- applications ---
     path("", include("applications.target.urls")),
+    path("o/", include("applications.onboarding.urls")),
 ]
 
 if settings.DEBUG and settings.PROFILING:  # pragma: no cover

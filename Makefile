@@ -1,5 +1,7 @@
 HERE := $(shell pwd)
 VENV := $(shell pipenv --venv)
+PYTHONPATH := ${HERE}/src
+TEST_PARAMS := --verbosity 2 --pythonpath ${PYTHONPATH}
 
 ifeq ($(origin PIPENV_ACTIVE), undefined)
 	PY := pipenv run
@@ -9,11 +11,14 @@ DBCLIENT := $(shell which mysql) --user root --password
 ifeq ($(ENV_FOR_DYNACONF), travis)
 	DBCLIENT := $(shell which mysql) --user root
 	PY :=
+	TEST_PARAMS := --failfast --keepdb --verbosity 0 --pythonpath ${PYTHONPATH}
 else ifeq ($(ENV_FOR_DYNACONF), heroku)
 	# TODO: figure out what to do in that case
 	DBCLIENT :=
 	PY :=
 endif
+
+MANAGE := ${PY} python src/manage.py
 
 
 .PHONY: format
@@ -22,29 +27,29 @@ format:
 	${PY} black ${HERE}
 
 
+.PHONY: sh
+sh:
+	${MANAGE} shell
+
+
 .PHONY: run
 run: static
-	${PY} python src/manage.py runserver
-
-
-.PHONY: runa
-runa: static
-	PYTHONPATH="${HERE}/src" ${PY} uvicorn project.asgi:application
+	${MANAGE} runserver
 
 
 .PHONY: static
 static:
-	${PY} python src/manage.py collectstatic --noinput --clear -v0
+	${MANAGE} collectstatic --noinput --clear -v0
 
 
 .PHONY: migrations
 migrations:
-	${PY} python src/manage.py makemigrations
+	${MANAGE} makemigrations
 
 
 .PHONY: migrate
 migrate:
-	${PY} python src/manage.py migrate
+	${MANAGE} migrate
 
 
 .PHONY: resetdb
@@ -58,20 +63,20 @@ initdb: resetdb migrate
 
 .PHONY: su
 su:
-	${PY} python src/manage.py createsuperuser
+	${MANAGE} createsuperuser
 
 
 .PHONY: test
 test:
 	ENV_FOR_DYNACONF=test \
 	${PY} coverage run \
-		src/manage.py test -v2 \
+		src/manage.py test ${TEST_PARAMS} \
 			applications \
 			project \
 
 	${PY} coverage report
-	${PY} black --check ${HERE}
 	${PY} isort --virtual-env ${VENV} --recursive --check-only ${HERE}
+	${PY} black --check ${HERE}
 
 
 .PHONY: report

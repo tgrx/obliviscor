@@ -19,6 +19,9 @@
                 <li><a class="{% if ns.startswith('target') %}active{% endif %}"
                        href="{{ url('target:index') }}">Target</a>
                 </li>
+                <li><a class="{% if ns.startswith('onboarding') %}active{% endif %}"
+                       href="{{ url('onboarding:index') }}">Onboarding</a>
+                </li>
             </ul>
         {% endwith %}
     </nav>

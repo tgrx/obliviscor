@@ -6,7 +6,7 @@ services:
 
 env:
   global:
-    - ENV_FOR_DYNACONF="travis"
+    - ENV_FOR_DYNACONF=travis
     - OBLIVISCOR_DATABASE_URL="mysql://root@localhost/obliviscor"
 
 install:

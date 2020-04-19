@@ -8,6 +8,9 @@
 
     <article>
         <h2>Reminders</h2>
+        {% if user.is_authenticated %}
+            <h3>{{ user.email }}</h3>
+        {% endif %}
 
         <section>
             <h3>Reminders</h3>

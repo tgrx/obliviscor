@@ -16,6 +16,7 @@ line-profiler = "*"
 pudb = "*"
 
 [packages]
+celery = "*"
 delorean = "*"
 dj-database-url = "*"
 django = {extras = ["bcrypt"],version = "*"}
