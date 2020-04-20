@@ -12,12 +12,13 @@
 <body>
 
 <header>
+    <p class="logo"><a href="/">💤</a></p>
     <h1>{% block header %}{% endblock %}</h1>
     <nav>
         {% with ns = request.resolver_match.namespace %}
             <ul>
-                <li><a class="{% if ns.startswith('target') %}active{% endif %}"
-                       href="{{ url('target:index') }}">Target</a>
+                <li><a class="{% if ns.startswith('reminders') %}active{% endif %}"
+                       href="{{ url('reminders:all_reminders') }}">Reminders</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li><a class="{% if ns.startswith('profile') %}active{% endif %}"

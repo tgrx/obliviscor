@@ -1,0 +1,44 @@
+{% extends "reminders/_base.html" %}
+{% block reminders %}
+    <article>
+        <h2>Reminders</h2>
+        <h3>Welcome {{ user.profile.name }}!</h3>
+        <p>
+            <a href="{{ url('reminders:create') }}">
+                <button class="button">Create reminder</button>
+            </a>
+        </p>
+    </article>
+    {% if own_reminders.count() %}
+        <article>
+            <h3>Your reminders:</h3>
+            {% for reminder in own_reminders %}
+                <section style="border: 1px dodgerblue dotted">
+                    <a href="{{ reminder.get_absolute_url() }}"><h4>{{ reminder.title }}</h4></a>
+                    <p>{{ reminder.description }}</p>
+                    <ul>
+                        {% for part in reminder.participants.all() %}
+                            <li>{{ part.profile.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endfor %}
+        </article>
+    {% endif %}
+    {% if participated_reminders.count() %}
+        <article>
+            <h3>Participated reminders:</h3>
+            {% for reminder in participated_reminders %}
+                <section style="border: 1px green dotted">
+                    <a href="{{ reminder.get_absolute_url() }}"><h4>{{ reminder.title }}</h4></a>
+                    <p>{{ reminder.description }}</p>
+                    <ul>
+                        {% for part in reminder.participants.all() %}
+                            <li>{{ part.profile.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </section>
+            {% endfor %}
+        </article>
+    {% endif %}
+{% endblock %}

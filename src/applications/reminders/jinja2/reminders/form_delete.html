@@ -1,0 +1,26 @@
+{% extends "reminders/_base.html" %}
+{% block reminders %}
+    <article>
+        <h2>Delete reminder</h2>
+        <section>
+            <h3>{{ object.title }}</h3>
+            <div class="profile-grid">
+                <p class="header">Description:</p>
+                <p>{{ object.description }}</p>
+                <p class="header">Notify at:</p>
+                <p>{{ Delorean(object.notify_at).shift('Europe/Minsk').humanize() }}</p>
+                <ul>
+                    {% for part in object.participants.all() %}
+                        <li>{{ part.profile.name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </section>
+        <form method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <p>
+                <button class="button">Delete</button>
+            </p>
+        </form>
+    </article>
+{% endblock %}

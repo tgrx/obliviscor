@@ -38,7 +38,7 @@ class ResponseTestMixin:
             )
             auth.save()
 
-        profile = Profile(user=user)
+        profile = Profile(user=user, name=f"name_{placeholder}")
         profile.save()
 
         return user

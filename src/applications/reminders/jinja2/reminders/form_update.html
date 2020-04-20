@@ -1,21 +1,8 @@
-{% extends "base.html" %}
-
-{% block title %}Edit Profile{% endblock %}
-
-{% block header %}Edit Profile{% endblock %}
-
-{% block main %}
-
+{% extends "reminders/_base.html" %}
+{% block reminders %}
     <article>
-
-        {% if user.is_anonymous %}
-
-            <h2>You are not authorized to use this</h2>
-
-        {% else %}
-
-            <h2>Your new data</h2>
-
+        <h2>Update reminder</h2>
+        <div class="profile-grid">
             <form method="post">
                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
                 <div class="profile-grid">
@@ -23,9 +10,6 @@
                 </div>
                 <button class="button" type="submit">Update</button>
             </form>
-
-        {% endif %}
-
+        </div>
     </article>
-
 {% endblock %}

@@ -33,7 +33,7 @@ INSTALLED_APPS_ORDERED = {
     50: "django.contrib.staticfiles",
     60: "django.contrib.sites",
     # --- my applications ---
-    1000: "applications.target.apps.TargetConfig",
+    1000: "applications.reminders.apps.RemindersConfig",
     2000: "applications.onboarding.apps.OnboardingConfig",
     3000: "applications.profile.apps.ProfileConfig",
 }
@@ -166,7 +166,7 @@ if not DEBUG:
     )
 
 LOGIN_URL = reverse_lazy("onboarding:sign_in")
-LOGIN_REDIRECT_URL = reverse_lazy("target:index")
+LOGIN_REDIRECT_URL = reverse_lazy("reminders:all_reminders")
 
 PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",

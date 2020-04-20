@@ -2,9 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200;400;600&display=swap');
 
 :root {
-    --color-bg: white;
+    --hue: 208;
+    --lig: 28.2%;
+    --sat: 79.2%;
+    --color-bg: hsl(var(--hue), var(--sat), 100%);
     --height-header: 120px;
-    --color-text: black;
+    --color-text: hsl(var(--hue), var(--sat), 0);
     --size-text: 20px;
 }
 
@@ -12,21 +15,35 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
 }
 
+a {
+    color: hsl(calc(var(--hue)), 100%, 50%);
+    text-decoration: underline;
+}
+
+a.active {
+    text-decoration: overline;
+}
+
+a:hover {
+    color: hsl(calc(var(--hue) - 30), 100%, 30%);
+}
+
 body {
     font-family: 'Dosis', sans-serif;
     font-size: var(--size-text);
     margin: 0;
-    min-width: 300px;
 }
 
 header {
     align-content: flex-start;
-    background-color: var(--color-bg);
+    background-color: hsl(var(--hue), var(--sat), var(--lig));
     border-bottom: 1px solid var(--color-bg);
+    color: hsl(var(--hue), var(--sat), 95%);
     display: flex;
     flex-wrap: wrap;
     height: var(--height-header);
     opacity: 0.9;
+    padding-left: 20px;
     position: fixed;
     top: 0;
     width: 100%;
@@ -40,6 +57,19 @@ header * {
     justify-content: space-around;
 }
 
+header .logo {
+    border-right: 4px black solid;
+    margin-right: 20px;
+    max-width: 50px;
+    vertical-align: center;
+}
+
+header .logo a {
+    font-size: calc(var(--size-text) * 2);
+    text-decoration: none;
+    vertical-align: center;
+}
+
 nav {
     align-content: flex-end;
     display: flex;
@@ -48,24 +78,30 @@ nav {
 }
 
 nav * li {
-    padding: 20px;
+    padding-right: 10px;
+    padding-top: 20px;
 }
 
 nav * a {
+    color: hsl(calc(var(--hue) + 180), 100%, 50%);
     text-decoration: none;
 }
 
 nav * a.active {
     text-decoration: overline;
+    transition-duration: 0.2s;
 }
 
 nav * a:hover {
     text-decoration: underline;
+    transition-duration: 0.2s;
 }
 
 main {
     margin-left: 20px;
     margin-top: calc(var(--height-header) + 30px);
+    min-height: 600px;
+    min-width: 300px;
 }
 
 article {
@@ -103,7 +139,7 @@ section {
 footer {
     align-content: flex-start;
     align-items: flex-start;
-    background-color: #5b80b2;
+    background-color: hsl(var(--hue), calc(var(--sat) * 0.9), var(--lig));
     border-top: 1px solid var(--color-bg);
     display: flex;
     flex-wrap: wrap;
@@ -115,5 +151,75 @@ footer {
 }
 
 footer > * {
+    color: hsl(var(--hue), var(--sat), 90%);
     flex-grow: 1;
+}
+
+footer a {
+    color: hsl(calc(var(--hue) + 180), 100%, 50%);
+    text-decoration: none;
+}
+
+footer a.active {
+    text-decoration: overline;
+    transition-duration: 0.2s;
+}
+
+footer a:hover {
+    text-decoration: underline;
+    transition-duration: 0.2s;
+}
+
+.button {
+    background-color: hsl(var(--hue), var(--sat), var(--lig));
+    border: 1px solid hsl(calc(var(--hue) + 10), var(--sat), calc(var(--lig) * 1.2));
+    color: hsl(var(--hue), var(--sat), calc(var(--lig) * 3));
+    display: inline-block;
+    font-size: 16px;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    transition-duration: 0.4s;
+}
+
+.button:hover {
+    background-color: hsl(var(--hue), var(--sat), 90%);
+    color: hsl(var(--hue), var(--sat), calc(var(--lig) * 0.5));
+}
+
+.profile-grid {
+    display: grid;
+    grid-column-gap: 1px;
+    grid-row-gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    margin-bottom: 30px;
+    margin-top: 20px;
+}
+
+.profile-grid > p {
+    font-style: normal;
+    margin: 1px;
+    padding: 4px;
+}
+
+.profile-grid label {
+    display: block;
+}
+
+.profile-grid > p.header {
+    font-style: oblique;
+}
+
+.profile-grid textarea, input, select[multiple] {
+    box-shadow: hsl(calc(var(--hue) + 215), 100%, 50%);
+    font-size: calc(var(--size-text) * 0.8);
+    width: 100%;
+    padding-left: 4px;
+}
+
+.profile-grid .errorlist {
+    color: hsl(calc(var(--hue) + 150), 100%, 50%);
+    grid-column: 1/3;
+    grid-row: 1;
 }

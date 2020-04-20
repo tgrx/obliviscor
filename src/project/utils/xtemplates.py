@@ -1,4 +1,5 @@
 import jinja2
+from delorean import Delorean
 from django.conf import settings
 from django.templatetags.static import static
 from django.urls import reverse_lazy
@@ -22,6 +23,7 @@ def build_jinja2_environment(**options) -> Environment:
 
     global_names = {
         "debug": settings.DEBUG,
+        "Delorean": Delorean,
         "project_name": consts.PROJECT_NAME.capitalize(),
         "static": static,
         "url": reverse_lazy,

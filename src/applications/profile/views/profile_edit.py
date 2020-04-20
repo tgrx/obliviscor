@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from applications.profile.forms.profile_edit import ProfileEditForm
-from applications.profile.models import Profile
 from applications.profile.utils.profile import setup_profile
 
 User = get_user_model()
@@ -14,7 +13,10 @@ User = get_user_model()
 class ProfileEditView(FormView):
     form_class = ProfileEditForm
     template_name = "profile/edit.html"
-    success_url = reverse_lazy("profile:me")
+
+    def get_success_url(self):
+        success_url = reverse_lazy("profile:me")
+        return success_url
 
     def form_valid(self, form):
         user = self.request.user

@@ -1,0 +1,25 @@
+{% extends "reminders/_base.html" %}
+{% block reminders %}
+    <article>
+        <h2>{{ object.title }}</h2>
+        <div class="profile-grid">
+            <p class="header">Description:</p>
+            <p>{{ object.description }}</p>
+            <p class="header">Notify at:</p>
+            <p>{{ Delorean(object.notify_at).shift('Europe/Minsk').humanize() }}</p>
+            <ul>
+                {% for part in object.participants.all() %}
+                    <li>{{ part.profile.name }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <p>
+            <a href="{{ url('reminders:update', args=(object.pk,)) }}">
+                <button class="button">Edit</button>
+            </a>
+            <a href="{{ url('reminders:delete', args=(object.pk,)) }}">
+                <button class="button">Delete</button>
+            </a>
+        </p>
+    </article>
+{% endblock %}

@@ -27,8 +27,10 @@
     <article>
         <form action="{{ url('onboarding:sign_up') }}" method="post">
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-            {{ form.as_p() }}
-            <input type="submit" value="Вписаться">
+            <div class="profile-grid">
+                {{ form.as_p() }}
+            </div>
+            <button type="submit" class="button">Sign Up</button>
             <input name="next" type="hidden" value="{{ next }}">
         </form>
     </article>

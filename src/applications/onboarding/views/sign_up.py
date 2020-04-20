@@ -9,7 +9,10 @@ from applications.onboarding.utils.verification import start_verification
 class SignUpView(FormView):
     template_name = "onboarding/sign_up.html"
     form_class = SignUpForm
-    success_url = reverse_lazy("onboarding:sign_up_confirmed")
+
+    def get_success_url(self):
+        success_url = reverse_lazy("onboarding:sign_up_confirmed")
+        return success_url
 
     @transaction.atomic()
     def form_valid(self, form):
