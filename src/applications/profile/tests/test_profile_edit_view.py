@@ -1,3 +1,4 @@
+import contextlib
 from os import urandom
 
 from django.test import Client
@@ -37,8 +38,22 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_profile_update(self):
+        with self._generic_case_with_user_setup():
+            pass
+
+    def test_absent_profile_update(self):
+        with self._generic_case_with_user_setup() as user:
+            profile = user.profile
+            profile.delete()
+            user.refresh_from_db()
+
+    @contextlib.contextmanager
+    def _generic_case_with_user_setup(self):
         placeholder = urandom(4).hex()
         user = self.create_user(placeholder, verified=True)
+
+        yield user
+
         client = Client()
         client.login(username=user.username, password=placeholder)
 

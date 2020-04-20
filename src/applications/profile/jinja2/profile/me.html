@@ -19,20 +19,22 @@
         {% endif %}
 
         <div class="profile-grid">
-            <p class="header">Login name</p>
+            <p class="header">Login name:</p>
             <p>{{ user.username }}</p>
 
             <p class="header">E-mail:</p>
             <p>{{ user.email }}</p>
 
-            <p class="header">Display name</p>
-            <p>{{ user.profile.name }}</p>
+            <p class="header">Display name:</p>
+            <p>{{ profile.name }}</p>
 
         </div>
 
-        <a href="{{ url('profile:edit') }}">
-            <button>Edit profile</button>
-        </a>
+        <p>
+            <a href="{{ url('profile:edit') }}">
+                <button class="button">Edit profile</button>
+            </a>
+        </p>
 
     </article>
 

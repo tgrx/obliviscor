@@ -5,6 +5,8 @@ from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from applications.profile.forms.profile_edit import ProfileEditForm
+from applications.profile.models import Profile
+from applications.profile.utils.profile import setup_profile
 
 User = get_user_model()
 
@@ -19,7 +21,11 @@ class ProfileEditView(FormView):
         user.username = form.cleaned_data["username"]
         user.save()
 
-        profile = user.profile
+        try:
+            profile = user.profile
+        except User.profile.RelatedObjectDoesNotExist:
+            profile = setup_profile(user)
+
         profile.name = form.cleaned_data["name"]
         profile.save()
 
@@ -28,11 +34,14 @@ class ProfileEditView(FormView):
     def get_initial(self) -> Dict:
         user = self.request.user
         initial = {}
+
         if not user.is_anonymous:
+            try:
+                profile = user.profile
+            except User.profile.RelatedObjectDoesNotExist:
+                profile = None
+
             initial.update(
-                {
-                    "username": user.username,
-                    "name": user.profile.name if user.profile else "",
-                }
+                {"username": user.username, "name": profile.name if profile else "",}
             )
         return initial

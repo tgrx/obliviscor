@@ -1,4 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView
+
+User = get_user_model()
 
 
 class ProfileView(TemplateView):
@@ -8,6 +11,13 @@ class ProfileView(TemplateView):
         ctx = super().get_context_data(**kwargs)
 
         req = self.request
+
+        try:
+            profile = req.user.profile
+        except (User.profile.RelatedObjectDoesNotExist, AttributeError):
+            profile = None
+
+        ctx["profile"] = profile
 
         newbie = (req.GET or {}).get("newbie")
         if newbie:
