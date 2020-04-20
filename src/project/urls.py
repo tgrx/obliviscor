@@ -10,6 +10,7 @@ urlpatterns = [
     # --- applications ---
     path("", include("applications.target.urls")),
     path("o/", include("applications.onboarding.urls")),
+    path("me/", include("applications.profile.urls")),
 ]
 
 if settings.DEBUG and settings.PROFILING:  # pragma: no cover

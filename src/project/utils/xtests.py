@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.test import Client
 
 from applications.onboarding.models import AuthProfile
+from applications.profile.models import Profile
 
 User = get_user_model()
 
@@ -18,8 +19,8 @@ class ResponseTestMixin:
         self, placeholder: str, user_kw: Optional[Dict] = None, verified=False
     ) -> User:
         form_data = {
-            "username": placeholder,
-            "email": placeholder,
+            "username": f"username_{placeholder}",
+            "email": f"email_{placeholder}@test.com",
             "password": placeholder,
         }
 
@@ -37,6 +38,11 @@ class ResponseTestMixin:
             )
             auth.save()
 
+        profile = Profile(user=user)
+        profile.save()
+
+        return user
+
     def validate_response(
         self,
         *,
@@ -49,8 +55,9 @@ class ResponseTestMixin:
         expected_status_code: Optional[int] = 200,
         content_filters: Optional[Collection[Callable[[bytes], bool]]] = None,
         expected_redirect_chain: Optional[List] = None,
+        client: Optional = None,
     ):
-        cli = Client()
+        cli = client if client else Client()
         meth = getattr(cli, method)
 
         meth_args = []

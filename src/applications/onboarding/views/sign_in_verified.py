@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.urls import reverse_lazy
 from django.views.generic import RedirectView
 
@@ -10,5 +9,9 @@ class SignInVerifiedView(RedirectView):
         code = self.kwargs.get("code")
         verified = finalize_verification(self.request, code)
 
-        urls = (reverse_lazy("onboarding:sign_in"), settings.LOGIN_REDIRECT_URL)
-        return urls[verified]
+        if not verified:
+            url = reverse_lazy("onboarding:sign_in")
+        else:
+            url = reverse_lazy("profile:me") + "?newbie=1"
+
+        return url

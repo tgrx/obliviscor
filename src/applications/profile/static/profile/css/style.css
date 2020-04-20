@@ -1,0 +1,23 @@
+.profile-grid {
+    display: grid;
+    grid-column-gap: 1px;
+    grid-row-gap: 1px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    /*margin-right: 20px;*/
+}
+
+.profile-grid > p {
+    font-style: normal;
+    margin: 1px;
+    /*min-height: 30px;*/
+    /*min-width: 10px;*/
+    padding-left: 4px;
+}
+
+.profile-grid > p.header {
+    /*background-color: hsl(var(--hue), var(--saturation), calc(var(--brightness) * 2));*/
+    /*border-bottom: 1px solid hsl(var(--hue), var(--saturation), var(--brightness));*/
+    font-style: oblique;
+    /*text-align: center;*/
+}

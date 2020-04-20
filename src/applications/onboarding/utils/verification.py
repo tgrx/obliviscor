@@ -7,6 +7,7 @@ from django.contrib.auth import login
 from django.http import HttpRequest
 
 from applications.onboarding.models import AuthProfile
+from applications.profile.utils.profile import setup_profile
 from project.utils.consts import PROJECT_NAME
 from project.utils.xmail import send_email
 
@@ -57,6 +58,8 @@ def finalize_verification(request: HttpRequest, code: Union[str, None]) -> bool:
     auth.save()
     auth.user.is_active = True
     auth.user.save()
+
+    setup_profile(auth.user)
 
     login(request, auth.user)
 

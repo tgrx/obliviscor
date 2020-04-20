@@ -12,7 +12,6 @@ Gunicorn timeout:
 
 """
 
-import multiprocessing
 from os import getenv
 from pathlib import Path
 

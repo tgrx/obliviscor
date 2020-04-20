@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block custom_styles %}
+    <link href="{{ static('profile/css/style.css') }}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block header %}Profile{% endblock %}
+
+{% block main %}
+
+    <article>
+
+        <h2>It's you!</h2>
+
+        {% if newbie_alert %}
+            <p><strong>{{ newbie_alert }}</strong></p>
+        {% endif %}
+
+        <div class="profile-grid">
+            <p class="header">Login name</p>
+            <p>{{ user.username }}</p>
+
+            <p class="header">E-mail:</p>
+            <p>{{ user.email }}</p>
+
+            <p class="header">Display name</p>
+            <p>{{ user.profile.name }}</p>
+
+        </div>
+
+        <a href="{{ url('profile:edit') }}">
+            <button>Edit profile</button>
+        </a>
+
+    </article>
+
+{% endblock %}

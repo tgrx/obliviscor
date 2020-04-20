@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from applications.onboarding.views import SignInView
+from applications.profile.views import ProfileView
 from applications.target.views import IndexView
 from project.utils.xtests import ResponseTestMixin
 
@@ -23,11 +24,11 @@ class Test(TestCase, ResponseTestMixin):
 
     def test_sign_in_post_success(self):
         placeholder = "xxx"
-        self.create_user(placeholder)
+        user = self.create_user(placeholder)
 
         form_data = {
-            "username": placeholder,
-            "email": placeholder,
+            "username": user.username,
+            "email": user.email,
             "password": placeholder,
         }
 
@@ -47,11 +48,11 @@ class Test(TestCase, ResponseTestMixin):
 
     def test_sign_in_post_failure_bad_creds(self):
         placeholder = "xxx"
-        self.create_user(placeholder)
+        user = self.create_user(placeholder)
 
         form_data = {
-            "username": placeholder,
-            "email": placeholder,
+            "username": user.username,
+            "email": user.email,
             "password": placeholder * 2,
         }
 
@@ -71,14 +72,14 @@ class Test(TestCase, ResponseTestMixin):
 
         self.validate_response(
             url=f"/o/sign_in/{placeholder}/",
-            expected_view_name="target:index",
-            expected_template="target/index.html",
-            expected_view=IndexView,
+            expected_view_name="profile:me",
+            expected_template="profile/me.html",
+            expected_view=ProfileView,
             content_filters=(
                 lambda _c: b"error" not in _c,
                 lambda _c: b"Error" not in _c,
             ),
-            expected_redirect_chain=[("/", 302)],
+            expected_redirect_chain=[("/me/?newbie=1", 302)],
         )
 
     def test_signin_verified_failure_bad_code(self):

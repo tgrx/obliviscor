@@ -35,6 +35,7 @@ INSTALLED_APPS_ORDERED = {
     # --- my applications ---
     1000: "applications.target.apps.TargetConfig",
     2000: "applications.onboarding.apps.OnboardingConfig",
+    3000: "applications.profile.apps.ProfileConfig",
 }
 
 if PROFILING:
