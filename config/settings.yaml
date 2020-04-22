@@ -14,6 +14,7 @@ default:
   SECRET_KEY: ""
   SENTRY_DSN: ""
   SITE_ID: 0
+  TIME_ZONE: ""
 
 
 development:
@@ -22,6 +23,7 @@ development:
   MODE_PROFILING: 0
   SECRET_KEY: "1"
   SITE_ID: 1
+  TIME_ZONE: "Europe/Minsk"
 
 
 production:
@@ -45,6 +47,7 @@ test:
   MODE_PROFILING: 0
   SECRET_KEY: "1"
   SITE_ID: 1
+  TIME_ZONE: "UTC"
 
 
 travis:
@@ -54,3 +57,4 @@ travis:
   MODE_PROFILING: 0
   SECRET_KEY: "1"
   SITE_ID: 1
+  TIME_ZONE: "UTC"

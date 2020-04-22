@@ -19,9 +19,9 @@ pudb = "*"
 celery = "*"
 delorean = "*"
 dj-database-url = "*"
-django = {extras = ["bcrypt"],version = "*"}
 django-bmemcached = "*"
 django-filter = "*"
+django = {extras = ["bcrypt"],version = "*"}
 djangorestframework = "*"
 dynaconf = {extras = ["yaml"],version = "*"}
 gunicorn = "*"
@@ -30,7 +30,6 @@ markdown = "*"
 mysqlclient = "*"
 psycopg2-binary = "*"
 sentry-sdk = "*"
-uvicorn = "*"
 whitenoise = "*"
 
 [requires]

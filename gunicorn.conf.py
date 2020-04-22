@@ -11,9 +11,11 @@ Gunicorn timeout:
 # http://docs.gunicorn.org/en/latest/settings.html#timeout
 
 """
-
+import multiprocessing
 from os import getenv
 from pathlib import Path
+
+from dynaconf import settings
 
 _here = Path(__file__).parent.resolve()
 assert _here.is_dir(), f"invalid here dir: `{_here!r}`"
@@ -30,7 +32,10 @@ graceful_timeout = 10
 max_requests = 200
 max_requests_jitter = 20
 pythonpath = _src_dir.as_posix()
-reload = False  # TODO: dynaconf
+reload = True
 timeout = 30
-worker_class = "uvicorn.workers.UvicornWorker"
-workers = 4  # multiprocessing.cpu_count() * 2 + 1  # XXX hahaha classic
+workers = multiprocessing.cpu_count() * 2 + 1  # XXX hahaha classic
+
+if settings.ENV_FOR_DYNACONF == "heroku":
+    reload = False
+    workers = int(getenv("WEB_CONCURRENCY", "4"))

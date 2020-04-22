@@ -5,12 +5,11 @@ from django.conf import settings
 from django.db import migrations
 from django.db import models
 
-import applications.reminders.models
 import applications.reminders.utils.consts
+from project.utils.xdatetime import utcnow
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -30,10 +29,7 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                (
-                    "created_at",
-                    models.DateTimeField(default=applications.reminders.models._now),
-                ),
+                ("created_at", models.DateTimeField(default=utcnow),),
                 ("description", models.TextField(blank=True, null=True)),
                 ("location", models.TextField(blank=True, null=True)),
                 ("notified_at", models.DateTimeField(blank=True, null=True)),

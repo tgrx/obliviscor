@@ -214,8 +214,8 @@ footer a:hover {
 .profile-grid textarea, input, select[multiple] {
     box-shadow: hsl(calc(var(--hue) + 215), 100%, 50%);
     font-size: calc(var(--size-text) * 0.8);
-    width: 100%;
     padding-left: 4px;
+    width: 100%;
 }
 
 .profile-grid .errorlist {
