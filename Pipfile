@@ -30,6 +30,7 @@ markdown = "*"
 mysqlclient = "*"
 psycopg2-binary = "*"
 sentry-sdk = "*"
+uvicorn = "*"
 whitenoise = "*"
 
 [requires]

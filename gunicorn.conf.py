@@ -29,11 +29,13 @@ _src_dir = (_here / "src").resolve()
 bind = f"0.0.0.0:{_port}"
 chdir = _src_dir.as_posix()
 graceful_timeout = 10
+lifespan = False
 max_requests = 200
 max_requests_jitter = 20
 pythonpath = _src_dir.as_posix()
 reload = True
 timeout = 30
+worker_class = "uvicorn.workers.UvicornWorker"
 workers = multiprocessing.cpu_count() * 2 + 1  # XXX hahaha classic
 
 if settings.ENV_FOR_DYNACONF == "heroku":
