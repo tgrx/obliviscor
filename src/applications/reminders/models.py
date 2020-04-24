@@ -17,7 +17,9 @@ class Reminder(models.Model):
     location = models.TextField(null=True, blank=True)
     notified_at = models.DateTimeField(null=True, blank=True)
     notify_at = models.DateTimeField(null=True, blank=True)
-    participants = models.ManyToManyField(User, related_name="participated_reminders")
+    participants = models.ManyToManyField(
+        User, related_name="participated_reminders", blank=True
+    )
     status = models.CharField(
         max_length=255,
         choices=ReminderStatus.to_choices(),

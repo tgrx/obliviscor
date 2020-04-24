@@ -1,18 +1,16 @@
-from os import urandom
-
 from django.test import Client
 from django.test import TestCase
 
 from applications.reminders.models import Reminder
 from applications.reminders.views import ReminderView
-from project.utils.xtests import ResponseTestMixin
+from project.utils.xtests import TemplateResponseTestMixin
+from project.utils.xtests import UserTestMixin
 
 
-class Test(TestCase, ResponseTestMixin):
+class Test(TestCase, TemplateResponseTestMixin, UserTestMixin):
     def test_get_anonymous(self):
-        placeholder = urandom(4).hex()
-        user = self.create_user(placeholder)
-        rem = Reminder(creator=user, title=f"title_{placeholder}")
+        user = self.create_user()
+        rem = Reminder(creator=user, title=f"title_{user.username}")
         rem.save()
 
         self.validate_response(
@@ -31,13 +29,12 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_get_user(self):
-        placeholder = urandom(4).hex()
-        user = self.create_user(placeholder)
-        rem = Reminder(creator=user, title=f"title_{placeholder}")
+        user = self.create_user()
+        rem = Reminder(creator=user, title=f"title_{user.username}")
         rem.save()
 
         client = Client()
-        client.login(username=user.username, password=placeholder)
+        client.login(username=user.username, password=user.username)
 
         self.validate_response(
             client=client,
@@ -45,5 +42,5 @@ class Test(TestCase, ResponseTestMixin):
             expected_view_name="reminders:reminder",
             expected_view=ReminderView,
             expected_template="reminders/reminder.html",
-            content_filters=(lambda _c: f"title_{placeholder}".encode() in _c,),
+            content_filters=(lambda _c: f"title_{user.username}".encode() in _c,),
         )

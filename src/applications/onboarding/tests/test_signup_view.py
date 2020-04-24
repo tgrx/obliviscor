@@ -6,12 +6,12 @@ from django.test import TestCase
 from applications.onboarding.views import SignUpConfirmedView
 from applications.onboarding.views import SignUpView
 from project.utils import xmail
-from project.utils.xtests import ResponseTestMixin
+from project.utils.xtests import TemplateResponseTestMixin
 
 User = get_user_model()
 
 
-class Test(TestCase, ResponseTestMixin):
+class Test(TestCase, TemplateResponseTestMixin):
     def test_sign_up_get(self):
         self.validate_response(
             url=f"/o/sign_up/",

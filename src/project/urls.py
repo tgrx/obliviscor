@@ -9,8 +9,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # --- applications ---
     path("", include("applications.reminders.urls")),
-    path("o/", include("applications.onboarding.urls")),
+    path("api/", include("applications.api.urls")),
     path("me/", include("applications.profile.urls")),
+    path("o/", include("applications.onboarding.urls")),
 ]
 
 if settings.DEBUG and settings.PROFILING:  # pragma: no cover

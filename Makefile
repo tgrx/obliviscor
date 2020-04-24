@@ -66,6 +66,11 @@ su:
 	${MANAGE} createsuperuser
 
 
+.PHONY: token
+token:
+	${MANAGE} drf_create_token $(TOKEN_USER)
+
+
 .PHONY: test
 test:
 	ENV_FOR_DYNACONF=test \

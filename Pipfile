@@ -19,10 +19,11 @@ pudb = "*"
 celery = "*"
 delorean = "*"
 dj-database-url = "*"
+django = {extras = ["bcrypt"],version = "*"}
 django-bmemcached = "*"
 django-filter = "*"
-django = {extras = ["bcrypt"],version = "*"}
 djangorestframework = "*"
+drf-yasg = {extras = ["validation"],version = "*"}
 dynaconf = {extras = ["yaml"],version = "*"}
 gunicorn = "*"
 jinja2 = "*"

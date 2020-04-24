@@ -6,6 +6,7 @@ omit =
     src/project/settings.py
 source = .
 
+
 [report]
 
 fail_under = 96

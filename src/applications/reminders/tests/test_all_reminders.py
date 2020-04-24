@@ -1,13 +1,12 @@
-from os import urandom
-
 from django.test import Client
 from django.test import TestCase
 
 from applications.reminders.views import AllRemindersView
-from project.utils.xtests import ResponseTestMixin
+from project.utils.xtests import TemplateResponseTestMixin
+from project.utils.xtests import UserTestMixin
 
 
-class Test(TestCase, ResponseTestMixin):
+class Test(TestCase, TemplateResponseTestMixin, UserTestMixin):
     def test_get_anonymous(self):
         self.validate_response(
             url="/",
@@ -18,10 +17,9 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_get_registered(self):
-        placeholder = urandom(4).hex()
-        user = self.create_user(placeholder, verified=True)
+        user = self.create_user(verified=True)
         client = Client()
-        client.login(username=user.username, password=placeholder)
+        client.login(username=user.username, password=user.username)
 
         self.validate_response(
             url="/",

@@ -32,10 +32,15 @@ INSTALLED_APPS_ORDERED = {
     40: "django.contrib.messages",
     50: "django.contrib.staticfiles",
     60: "django.contrib.sites",
+    # --- 3dp applications ---
+    1000: "rest_framework",
+    1001: "rest_framework.authtoken",
+    2000: "drf_yasg",
     # --- my applications ---
-    1000: "applications.reminders.apps.RemindersConfig",
-    2000: "applications.onboarding.apps.OnboardingConfig",
-    3000: "applications.profile.apps.ProfileConfig",
+    10000: "applications.reminders.apps.RemindersConfig",
+    20000: "applications.onboarding.apps.OnboardingConfig",
+    30000: "applications.profile.apps.ProfileConfig",
+    40000: "applications.api.apps.ApiConfig",
 }
 
 if PROFILING:
@@ -185,3 +190,15 @@ EMAIL_USE_TLS = _settings.EMAIL_USE_TLS
 SITE_ID = _settings.SITE_ID
 
 EMAIL_FROM = _settings.EMAIL_FROM
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+}
+
+SWAGGER_SETTINGS = {
+    "SECURITY_DEFINITIONS": {
+        "Token": {"type": "apiKey", "name": "Authorization", "in": "header",}
+    },
+}

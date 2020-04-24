@@ -1,12 +1,15 @@
+from os import urandom
 from typing import Callable
 from typing import Collection
 from typing import Dict
 from typing import List
 from typing import Optional
+from typing import Text
 
 from delorean import Delorean
 from django.contrib.auth import get_user_model
 from django.test import Client
+from rest_framework import status
 
 from applications.onboarding.models import AuthProfile
 from applications.profile.models import Profile
@@ -14,12 +17,16 @@ from applications.profile.models import Profile
 User = get_user_model()
 
 
-class ResponseTestMixin:
+class UserTestMixin:
     def create_user(
-        self, placeholder: str, user_kw: Optional[Dict] = None, verified=False
+        self,
+        placeholder: Optional[str] = None,
+        user_kw: Optional[Dict] = None,
+        verified=False,
     ) -> User:
+        placeholder = placeholder or urandom(4).hex()
         form_data = {
-            "username": f"username_{placeholder}",
+            "username": f"{placeholder}",
             "email": f"email_{placeholder}@test.com",
             "password": placeholder,
         }
@@ -31,18 +38,47 @@ class ResponseTestMixin:
         user.save()
 
         if verified:
-            auth = AuthProfile(
-                user=user,
-                verification_code=placeholder,
-                verified_at=Delorean().datetime,
-            )
-            auth.save()
+            self.create_auth_profile(user)
 
-        profile = Profile(user=user, name=f"name_{placeholder}")
-        profile.save()
+        self.create_profile(user)
 
         return user
 
+    @staticmethod
+    def create_auth_profile(user: User) -> AuthProfile:
+        auth = AuthProfile(
+            user=user, verification_code=user.username, verified_at=Delorean().datetime,
+        )
+        auth.save()
+
+        return auth
+
+    @staticmethod
+    def create_profile(user) -> Profile:
+        profile = Profile(user=user, name=f"name_{user.username}")
+        profile.save()
+        return profile
+
+    def create_auth_token(self, user, client: Optional[Client] = None) -> str:
+        cli = client or self.client
+
+        credentials = {"username": user.username, "password": user.username}
+
+        resp = cli.post("/api/obtain_auth_token/", credentials)
+        self.assertEqual(status.HTTP_200_OK, resp.status_code)
+
+        payload = resp.json()
+        self.assertEqual(1, len(payload))
+        self.assertIsInstance(payload, dict)
+        self.assertIn("token", payload)
+
+        token = payload["token"]
+        self.assertTrue(token)
+
+        return token
+
+
+class TemplateResponseTestMixin:
     def validate_response(
         self,
         *,
@@ -57,7 +93,7 @@ class ResponseTestMixin:
         content_filters: Optional[Collection[Callable[[bytes], bool]]] = None,
         expected_redirect_chain: Optional[List] = None,
     ):
-        cli = client if client else Client()
+        cli = client or self.client
         meth = getattr(cli, method)
 
         meth_args = []
@@ -84,3 +120,30 @@ class ResponseTestMixin:
 
         for content_filter in content_filters or []:
             self.assertTrue(content_filter(resp.content))
+
+
+class ApiTestMixin:
+    def validate_response(
+        self,
+        url: str,
+        *,
+        client: Optional = None,
+        method: Optional[str] = "get",
+        headers: Optional[Dict[Text, Text]] = None,
+        data: Optional = None,
+        expected_status_code: Optional[int] = 200,
+        expected_response_payload: Optional = None,
+    ):
+        cli = client or self.client
+        meth = getattr(cli, method)
+
+        kwargs = (headers or {}).copy()
+        if data is not None:
+            kwargs["data"] = data
+
+        resp = meth(url, content_type="application/json", **kwargs)
+        self.assertEqual(expected_status_code, resp.status_code)
+
+        if expected_response_payload is not None:
+            payload = resp.json()
+            self.assertEqual(expected_response_payload, payload)

@@ -1,17 +1,16 @@
-from os import urandom
-
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from applications.onboarding.views import SignInView
 from applications.profile.views import ProfileView
 from applications.reminders.views import AllRemindersView
-from project.utils.xtests import ResponseTestMixin
+from project.utils.xtests import TemplateResponseTestMixin
+from project.utils.xtests import UserTestMixin
 
 User = get_user_model()
 
 
-class Test(TestCase, ResponseTestMixin):
+class Test(TestCase, TemplateResponseTestMixin, UserTestMixin):
     def test_sign_in_get(self):
         self.validate_response(
             url=f"/o/sign_in/",
@@ -25,13 +24,12 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_sign_in_post_success(self):
-        placeholder = urandom(4).hex()
-        user = self.create_user(placeholder)
+        user = self.create_user()
 
         form_data = {
             "username": user.username,
             "email": user.email,
-            "password": placeholder,
+            "password": user.username,
         }
 
         self.validate_response(
@@ -49,13 +47,12 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_sign_in_post_failure_bad_creds(self):
-        placeholder = urandom(4).hex()
-        user = self.create_user(placeholder)
+        user = self.create_user()
 
         form_data = {
             "username": user.username,
             "email": user.email,
-            "password": placeholder * 2,
+            "password": user.username * 2,
         }
 
         self.validate_response(
@@ -69,11 +66,10 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_signin_verified_success(self):
-        placeholder = urandom(4).hex()
-        self.create_user(placeholder, verified=True)
+        user = self.create_user(verified=True)
 
         self.validate_response(
-            url=f"/o/sign_in/{placeholder}/",
+            url=f"/o/sign_in/{user.username}/",
             expected_view_name="profile:me",
             expected_template="profile/me.html",
             expected_view=ProfileView,
@@ -85,11 +81,10 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_signin_verified_failure_bad_code(self):
-        placeholder = urandom(4).hex()
-        self.create_user(placeholder, verified=True)
+        user = self.create_user(verified=True)
 
         self.validate_response(
-            url=f"/o/sign_in/{placeholder * 2}/",
+            url=f"/o/sign_in/{user.username * 2}/",
             expected_view_name="onboarding:sign_in",
             expected_template="onboarding/sign_in.html",
             expected_view=SignInView,
@@ -100,11 +95,10 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_signin_verified_failure_not_verified(self):
-        placeholder = urandom(4).hex()
-        self.create_user(placeholder)
+        user = self.create_user()
 
         self.validate_response(
-            url=f"/o/sign_in/{placeholder}/",
+            url=f"/o/sign_in/{user.username}/",
             expected_view_name="onboarding:sign_in",
             expected_template="onboarding/sign_in.html",
             expected_view=SignInView,

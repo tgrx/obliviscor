@@ -4,11 +4,12 @@ from unittest import TestCase
 from django.contrib.auth import get_user_model
 
 from applications.onboarding.forms.sign_up import SignUpForm
+from project.utils.xtests import UserTestMixin
 
 User = get_user_model()
 
 
-class Test(TestCase):
+class Test(TestCase, UserTestMixin):
     def test_sign_up_form_empty(self):
         form = SignUpForm({})
         with self.assertRaises(ValueError):
@@ -24,10 +25,7 @@ class Test(TestCase):
             form.save()
 
     def test_sign_up_form_email_taken(self):
-        placeholder = urandom(4).hex()
-        user = User.objects.create_user(
-            email=f"email_{placeholder}@test.com", username=f"username_{placeholder}",
-        )
+        user = self.create_user()
 
         form = SignUpForm({"email": user.email})
         with self.assertRaises(ValueError):
@@ -42,7 +40,8 @@ class Test(TestCase):
 
         user = User.objects.filter(email=email)
         self.assertEqual(user.count(), 1)
+
         user = user.first()
-        self.assertEqual(user.email, email)
+        self.assertEqual(email, user.email)
         self.assertTrue(user.username)
         self.assertTrue(user.check_password(user.username))

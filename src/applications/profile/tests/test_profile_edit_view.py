@@ -1,15 +1,15 @@
 import contextlib
-from os import urandom
 
 from django.test import Client
 from django.test import TestCase
 
 from applications.profile.views import ProfileEditView
 from applications.profile.views import ProfileView
-from project.utils.xtests import ResponseTestMixin
+from project.utils.xtests import TemplateResponseTestMixin
+from project.utils.xtests import UserTestMixin
 
 
-class Test(TestCase, ResponseTestMixin):
+class Test(TestCase, TemplateResponseTestMixin, UserTestMixin):
     def test_get_anonymous(self):
         self.validate_response(
             url="/me/edit/",
@@ -20,10 +20,9 @@ class Test(TestCase, ResponseTestMixin):
         )
 
     def test_get_normal_user(self):
-        placeholder = urandom(4).hex()
-        user = self.create_user(placeholder, verified=True)
+        user = self.create_user(verified=True)
         client = Client()
-        client.login(username=user.username, password=placeholder)
+        client.login(username=user.username, password=user.username)
 
         self.validate_response(
             client=client,
@@ -49,16 +48,15 @@ class Test(TestCase, ResponseTestMixin):
 
     @contextlib.contextmanager
     def _generic_case_with_user_setup(self):
-        placeholder = urandom(4).hex()
-        user = self.create_user(placeholder, verified=True)
+        user = self.create_user(verified=True)
 
         yield user
 
         client = Client()
-        client.login(username=user.username, password=placeholder)
+        client.login(username=user.username, password=user.username)
 
-        new_username = f"username_{placeholder}_xxx"
-        new_name = f"name_{placeholder}_xxx"
+        new_username = f"username_{user.username}_xxx"
+        new_name = f"name_{user.username}_xxx"
 
         self.validate_response(
             client=client,

@@ -4,11 +4,12 @@ from unittest import TestCase
 from django.contrib.auth import get_user_model
 
 from applications.profile.forms.profile_edit import ProfileEditForm
+from project.utils.xtests import UserTestMixin
 
 User = get_user_model()
 
 
-class Test(TestCase):
+class Test(TestCase, UserTestMixin):
     def test_profile_edit_form_empty(self):
         form = ProfileEditForm({})
         self.assertFalse(form.is_valid())
@@ -18,11 +19,7 @@ class Test(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_profile_edit_form_username_taken(self):
-        placeholder = urandom(4).hex()
-        user = User.objects.create_user(
-            email=f"email_{placeholder}@test.com", username=f"username_{placeholder}"
-        )
-        user.save()
+        user = self.create_user()
 
         form_data = {"username": user.username}
 

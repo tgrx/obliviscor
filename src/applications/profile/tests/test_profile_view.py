@@ -1,10 +1,10 @@
 from django.test import TestCase
 
 from applications.profile.views import ProfileView
-from project.utils.xtests import ResponseTestMixin
+from project.utils.xtests import TemplateResponseTestMixin
 
 
-class Test(TestCase, ResponseTestMixin):
+class Test(TestCase, TemplateResponseTestMixin):
     def test_get(self):
         self.validate_response(
             url="/me/",
