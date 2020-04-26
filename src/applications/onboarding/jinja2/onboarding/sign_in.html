@@ -27,7 +27,7 @@
 
         <form action="{{ url('onboarding:sign_in') }}" method="post">
             <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-            <div class="profile-grid">
+            <div class="grid">
                 <p>
                     {{ form.username.label_tag() }}
                     {{ form.username }}

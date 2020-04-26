@@ -1,11 +1,8 @@
-from unittest.mock import patch
-
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 from applications.onboarding.views import SignUpConfirmedView
 from applications.onboarding.views import SignUpView
-from project.utils import xmail
 from project.utils.xtests import TemplateResponseTestMixin
 
 User = get_user_model()
@@ -24,8 +21,7 @@ class Test(TestCase, TemplateResponseTestMixin):
             ),
         )
 
-    @patch.object(xmail, xmail.send_mail.__name__)
-    def test_sign_up_post(self, mock_send_mail):
+    def test_sign_up_post(self):
         form = {"email": "tesmail@test.com"}
 
         user = User.objects.filter(email=form["email"]).first()
@@ -44,8 +40,6 @@ class Test(TestCase, TemplateResponseTestMixin):
                 lambda _c: b"Error" not in _c,
             ),
         )
-
-        mock_send_mail.assert_called_once()
 
         user = User.objects.get(email=form["email"])
         self.assertIsNotNone(user)

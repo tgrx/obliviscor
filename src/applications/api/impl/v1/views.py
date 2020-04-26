@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from rest_framework.exceptions import PermissionDenied
+from django.db.models import Q
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -19,13 +19,13 @@ class UserViewSet(ReadOnlyModelViewSet):
 
 class ReminderViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated,)
-    queryset = Reminder.objects.all()
     serializer_class = ReminderSerializer
+
+    def get_queryset(self):
+        criteria = Q(creator=self.request.user) | Q(
+            participants__in=[self.request.user]
+        )
+        return Reminder.objects.filter(criteria)
 
     def perform_create(self, serializer):
         serializer.save(creator=self.request.user)
-
-    def perform_update(self, serializer):
-        if serializer.instance.creator != self.request.user:
-            raise PermissionDenied("not your object")
-        return super().perform_update(serializer)

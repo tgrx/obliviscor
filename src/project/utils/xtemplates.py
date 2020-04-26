@@ -25,6 +25,7 @@ def build_jinja2_environment(**options) -> Environment:
         "debug": settings.DEBUG,
         "Delorean": Delorean,
         "project_name": consts.PROJECT_NAME.capitalize(),
+        "repr": repr,
         "static": static,
         "url": reverse_lazy,
     }

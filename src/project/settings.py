@@ -24,6 +24,12 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
+PORT = _settings.PORT
+if _settings.ENV_FOR_DYNACONF == "heroku":
+    _PORT = getenv("PORT")
+    assert _PORT and _PORT.isdecimal(), f"invalid port value: {_PORT!r}"
+    PORT = int(PORT)
+
 INSTALLED_APPS_ORDERED = {
     0: "django.contrib.admin",
     10: "django.contrib.auth",
@@ -129,6 +135,9 @@ if CACHING:
         #     }
         # }
         pass
+else:
+    CACHE_MIDDLEWARE_SECONDS = 0
+    CACHES = {"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache",}}
 
 AUTH_PASSWORD_VALIDATORS = [
     {

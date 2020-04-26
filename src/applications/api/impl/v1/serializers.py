@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from applications.reminders.models import Reminder
+from applications.reminders.utils.consts import ReminderStatus
 from project.utils.xmodels import a
 
 User = get_user_model()
@@ -26,6 +27,12 @@ class ReminderSerializer(serializers.ModelSerializer):
                 Reminder.id,
                 Reminder.notified_at,
                 Reminder.pk,
-                Reminder.status,
             )
         ]
+
+    @staticmethod
+    def validate_status(value):
+        done = ReminderStatus.DONE.name
+        if value != done:
+            raise serializers.ValidationError(f"status can be set to {done} only")
+        return value

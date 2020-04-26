@@ -1,11 +1,13 @@
 {% extends "reminders/_base.html" %}
 {% block reminders %}
     <article>
+        <b><a href="{{ url("reminders:reminder", args=(object.pk,)) }}"
+              title="Reminder `{{ object.title }}`"><<<</a></b>
         <h2>Update reminder</h2>
-        <div class="profile-grid">
+        <div>
             <form method="post">
                 <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                <div class="profile-grid">
+                <div class="grid">
                     {{ form.as_p() }}
                 </div>
                 <button class="button" type="submit">Update</button>

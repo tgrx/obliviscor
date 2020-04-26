@@ -1,25 +1,54 @@
 {% extends "reminders/_base.html" %}
 {% block reminders %}
     <article>
+        <b><a href="{{ url("reminders:all_reminders") }}"><<<</a></b>
         <h2>{{ object.title }}</h2>
-        <div class="profile-grid">
-            <p class="header">Description:</p>
-            <p>{{ object.description }}</p>
-            <p class="header">Notify at:</p>
-            <p>{{ Delorean(object.notify_at).shift('Europe/Minsk').humanize() }}</p>
+        <div class="grid">
+            <div>
+                <label for="rem-notify-at" class="header">Notify at:</label>
+                <p id="rem-notify-at">{{ object.notify_at_full }}</p>
+            </div>
+            <div>
+                <label for="rem-description" class="header">Description:</label>
+                <p id="rem-description">{{ object.description }}</p>
+            </div>
+            <div>
+                <label for="rem-location" class="header">Location:</label>
+                <p id="rem-location">{{ object.location }}</p>
+            </div>
+            <div>
+                <label for="rem-participants" class="header">Participants:</label>
+                <ul id="rem-participants">
+                    {% for part in object.participants.all() %}
+                        <li>{{ part.profile.name }} &lt;{{ part.email }}&gt;</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="technical">
             <ul>
-                {% for part in object.participants.all() %}
-                    <li>{{ part.profile.name }}</li>
-                {% endfor %}
+                <li>status: {{ object.status }}</li>
+                <li>author: {{ object.creator }}</li>
+                <li>created: {{ object.created_at }}</li>
+                <li>notified: {{ object.notified_at }}</li>
             </ul>
         </div>
-        <p>
-            <a href="{{ url('reminders:update', args=(object.pk,)) }}">
-                <button class="button">Edit</button>
-            </a>
-            <a href="{{ url('reminders:delete', args=(object.pk,)) }}">
-                <button class="button">Delete</button>
-            </a>
-        </p>
+        </div>
+        {% if user == object.creator %}
+            <div class="controls">
+                {% if object.is_active %}
+                    <form method="post" action="{{ url('reminders:done', args=(object.pk,)) }}">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                        <button type="submit" class="button">Done</button>
+                    </form>
+                    <a href="{{ url('reminders:update', args=(object.pk,)) }}">
+                        <button class="button">Edit</button>
+                    </a>
+                {% endif %}
+                <a href="{{ url('reminders:delete', args=(object.pk,)) }}">
+                    <button class="button">Delete</button>
+                </a>
+            </div>
+        {% endif %}
     </article>
 {% endblock %}

@@ -9,13 +9,15 @@
             </a>
         </p>
     </article>
-    {% if own_reminders.count() %}
+    {% if user.own_reminders.count() %}
         <article>
             <h3>Your reminders:</h3>
-            {% for reminder in own_reminders %}
-                <section style="border: 1px dodgerblue dotted">
-                    <a href="{{ reminder.get_absolute_url() }}"><h4>{{ reminder.title }}</h4></a>
-                    <p>{{ reminder.description }}</p>
+            {% for reminder in user.own_reminders.all() %}
+                <section
+                        class="reminder reminder-own {%- if reminder.is_active %} reminder-active{% endif %} {%- if reminder.is_notified %} reminder-notified{% endif %} {%- if reminder.is_done %} reminder-done{% endif %}">
+                    <h4><a href="{{ reminder.get_absolute_url() }}">{{ reminder.title }}</a></h4>
+                    <p class="description">{{ reminder.notify_at_humanized }}</p>
+                    <p class="description">{{ reminder.description }}</p>
                     <ul>
                         {% for part in reminder.participants.all() %}
                             <li>{{ part.profile.name }}</li>
@@ -25,13 +27,15 @@
             {% endfor %}
         </article>
     {% endif %}
-    {% if participated_reminders.count() %}
+    {% if user.participated_reminders.count() %}
         <article>
             <h3>Participated reminders:</h3>
-            {% for reminder in participated_reminders %}
-                <section style="border: 1px green dotted">
-                    <a href="{{ reminder.get_absolute_url() }}"><h4>{{ reminder.title }}</h4></a>
-                    <p>{{ reminder.description }}</p>
+            {% for reminder in user.participated_reminders.all() %}
+                <section
+                        class="reminder reminder-part {%- if reminder.is_active %} reminder-active{% endif %} {%- if reminder.is_notified %} reminder-notified{% endif %} {%- if reminder.is_done %} reminder-done{% endif %}">
+                    <h4><a href="{{ reminder.get_absolute_url() }}">{{ reminder.title }}</a></h4>
+                    <p class="description">{{ reminder.notify_at_humanized }}</p>
+                    <p class="description">{{ reminder.description }}</p>
                     <ul>
                         {% for part in reminder.participants.all() %}
                             <li>{{ part.profile.name }}</li>

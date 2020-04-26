@@ -22,10 +22,12 @@ class CustomDateTimeField(forms.DateTimeField):
         if not isinstance(value, datetime):
             return super().prepare_value(value)
 
-        dtm_utc = delorean.Delorean(value, timezone="UTC").shift("UTC").datetime
+        dtm_utc = (
+            delorean.Delorean(value, timezone=settings.TIME_ZONE).shift("UTC").datetime
+        )
         dtm_super = super().prepare_value(dtm_utc)
         dtm_prepared = (
-            delorean.Delorean(dtm_super, timezone="UTC")
+            delorean.Delorean(dtm_super, timezone=settings.TIME_ZONE)
             .shift(settings.TIME_ZONE)
             .datetime.replace(tzinfo=None)
             .strftime("%Y-%m-%dT%H:%M")

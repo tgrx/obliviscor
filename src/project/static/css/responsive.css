@@ -1,43 +1,76 @@
-@media only screen and (max-width: 960px) {
-    nav * li {
-        padding: 5px;
+@media only screen
+and (max-width: 1300px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-@media only screen and (max-width: 800px) {
+@media only screen
+and (max-width: 720px) {
+    .grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .controls {
+        display: grid;
+        grid-column-gap: 4px;
+        grid-row-gap: 4px;
+        grid-template-areas: "bt1" "bt2" "bt3" "bt4";
+    }
+}
+
+
+/* --------- iPhone 11 Pro --------- */
+/* 2436x1125px at 458ppi */
+@media only screen
+and (device-width: 375px)
+and (device-height: 812px)
+and (-webkit-device-pixel-ratio: 3) {
+
     :root {
-        --height-header: 150px;
+        --height-header: 300px;
+        --size-text: 50px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    header > h1 {
+        flex-basis: 50%;
+        font-size: calc(var(--size-text) * 1.2);
+    }
+
+    header .logo {
+        font-size: calc(var(--size-text) * 0.2);
+        margin-right: 30px;
+        max-width: 130px;
     }
 
     nav {
-        align-content: flex-start;
-        font-size: calc(var(--size-text) * 0.7);
-    }
-
-    header > h1 {
+        align-content: flex-end;
+        display: flex;
         flex-basis: 100%;
+        flex-wrap: wrap;
         font-size: calc(var(--size-text) * 0.8);
-    }
-
-}
-
-/* --------- iPhone 11 Pro --------- */
-@media only screen and (min-height: 812px) {
-
-    :root {
-        --height-header: 400px;
-        --size-text: 40px;
-    }
-
-    header > h1 {
-        flex-basis: 100%;
+        padding-right: 10px;
     }
 
     main {
         margin-left: 40px;
+        min-height: 1100px;
     }
 
     footer {
         padding-left: 40px;
     }
+
+    .button {
+        font-size: calc(var(--size-text) * 0.6);
+        padding: 30px 60px;
+        text-align: center;
+        text-decoration: none;
+        transition-duration: 0.4s;
+    }
+
 }

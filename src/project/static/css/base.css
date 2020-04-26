@@ -2,13 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200;400;600&display=swap');
 
 :root {
+    --bri: 28.2%;
     --hue: 208;
-    --lig: 28.2%;
     --sat: 79.2%;
+
     --color-bg: hsl(var(--hue), var(--sat), 100%);
-    --height-header: 120px;
+    --height-header: 80px;
     --color-text: hsl(var(--hue), var(--sat), 0);
-    --size-text: 20px;
+    --size-text: 16px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -16,7 +17,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 a {
-    color: hsl(calc(var(--hue)), 100%, 50%);
+    color: hsl(var(--hue), 100%, 20%);
     text-decoration: underline;
 }
 
@@ -36,7 +37,7 @@ body {
 
 header {
     align-content: flex-start;
-    background-color: hsl(var(--hue), var(--sat), var(--lig));
+    background-color: hsl(var(--hue), var(--sat), var(--bri));
     border-bottom: 1px solid var(--color-bg);
     color: hsl(var(--hue), var(--sat), 95%);
     display: flex;
@@ -100,7 +101,7 @@ nav * a:hover {
 main {
     margin-left: 20px;
     margin-top: calc(var(--height-header) + 30px);
-    min-height: 600px;
+    min-height: 800px;
     min-width: 300px;
 }
 
@@ -129,17 +130,16 @@ article > p, h2, h3, h4 {
 section {
     margin-bottom: 20px;
     margin-right: 20px;
-    max-width: 550px;
-    min-width: 300px;
+    max-width: 300px;
     padding-left: 20px;
     padding-right: 10px;
-    width: 500px;
+    width: 300px;
 }
 
 footer {
     align-content: flex-start;
     align-items: flex-start;
-    background-color: hsl(var(--hue), calc(var(--sat) * 0.9), var(--lig));
+    background-color: hsl(var(--hue), calc(var(--sat) * 0.9), var(--bri));
     border-top: 1px solid var(--color-bg);
     display: flex;
     flex-wrap: wrap;
@@ -171,11 +171,11 @@ footer a:hover {
 }
 
 .button {
-    background-color: hsl(var(--hue), var(--sat), var(--lig));
-    border: 1px solid hsl(calc(var(--hue) + 10), var(--sat), calc(var(--lig) * 1.2));
-    color: hsl(var(--hue), var(--sat), calc(var(--lig) * 3));
+    background-color: hsl(var(--hue), var(--sat), var(--bri));
+    border: 1px solid hsl(calc(var(--hue) + 10), var(--sat), calc(var(--bri) * 1.2));
+    color: hsl(var(--hue), var(--sat), calc(var(--bri) * 3));
     display: inline-block;
-    font-size: 16px;
+    font-size: var(--size-text);
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
@@ -184,42 +184,113 @@ footer a:hover {
 
 .button:hover {
     background-color: hsl(var(--hue), var(--sat), 90%);
-    color: hsl(var(--hue), var(--sat), calc(var(--lig) * 0.5));
+    color: hsl(var(--hue), var(--sat), calc(var(--bri) * 0.5));
 }
 
-.profile-grid {
+/* TODO: https://css-tricks.com/snippets/css/complete-guide-grid/ */
+.grid {
     display: grid;
     grid-column-gap: 1px;
     grid-row-gap: 20px;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     grid-template-rows: auto;
     margin-bottom: 30px;
     margin-top: 20px;
 }
 
-.profile-grid > p {
+.grid > p {
     font-style: normal;
     margin: 1px;
     padding: 4px;
 }
 
-.profile-grid label {
+.grid label {
     display: block;
+    font-style: italic;
 }
 
-.profile-grid > p.header {
+.grid > p.header {
     font-style: oblique;
 }
 
-.profile-grid textarea, input, select[multiple] {
+.grid textarea, input, select[multiple] {
     box-shadow: hsl(calc(var(--hue) + 215), 100%, 50%);
     font-size: calc(var(--size-text) * 0.8);
     padding-left: 4px;
-    width: 100%;
+    width: 68%;
 }
 
-.profile-grid .errorlist {
+select[multiple] {
+    min-height: 150px;
+}
+
+.grid .errorlist {
     color: hsl(calc(var(--hue) + 150), 100%, 50%);
     grid-column: 1/3;
     grid-row: 1;
+}
+
+.description {
+    color: hsl(0, 0%, 20%);
+    font-size: calc(var(--size-text) * 0.7);
+    font-style: italic;
+}
+
+.reminder li {
+    background-color: hsl(var(--color-rem-hue), var(--sat), 80%);
+    margin: 4px;
+    padding: 4px;
+}
+
+.reminder {
+    border-left: hsl(var(--color-rem-hue), var(--sat), var(--bri)) 10px solid;
+}
+
+.reminder-own {
+    --color-rem-hue: var(--hue);
+}
+
+.reminder-part {
+    --color-rem-hue: calc(var(--hue) - 120);
+}
+
+.reminder-active {
+    background-color: hsl(var(--color-rem-hue), var(--sat), 96%);
+}
+
+.reminder-active h4:after {
+    content: " 🔈 ";
+}
+
+.reminder-notified h4:after {
+    content: " 🔊 ";
+}
+
+.reminder-done h4:after {
+    content: " 🔇 ";
+}
+
+.technical {
+    color: hsl(var(--hue), 10%, 80%);
+    flex-basis: 100%;
+    font-size: calc(var(--size-text) * 0.8);
+}
+
+.technical * li {
+    display: inline-block;
+}
+
+.technical * li:after {
+    content: " — ";
+}
+
+.technical * li:last-child:after {
+    content: "";
+}
+
+.controls {
+    display: grid;
+    grid-column-gap: 4px;
+    grid-row-gap: 4px;
+    grid-template-areas: "bt1 bt2 bt3 bt4";
 }

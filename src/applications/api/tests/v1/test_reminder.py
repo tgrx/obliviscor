@@ -19,8 +19,9 @@ class Test(TestCase, ApiTestMixin, UserTestMixin):
         self.token = self.create_auth_token(self.user)
         self.auth_headers = {"HTTP_AUTHORIZATION": f"Token {self.token}"}
 
-        self.reminder = Reminder(creator=self.user)
-        self.reminder.save()
+        self.user2 = self.create_user()
+        self.reminder2 = Reminder(creator=self.user2)
+        self.reminder2.save()
 
     def test_user_get_anon(self):
         self.validate_response(
@@ -28,23 +29,24 @@ class Test(TestCase, ApiTestMixin, UserTestMixin):
         )
 
     def test_user_normal(self):
+        reminder = Reminder(creator=self.user)
+        reminder.save()
+
         self.validate_response(
             self.endpoint,
             headers=self.auth_headers,
             expected_response_payload=[
                 {
-                    "created_at": self.reminder.created_at.strftime(
-                        "%Y-%m-%dT%H:%M:%S.%fZ"
-                    ),
+                    "created_at": reminder.created_at.strftime("%Y-%m-%dT%H:%M:%S.%fZ"),
                     "creator": self.user.pk,
-                    "description": self.reminder.description,
-                    "id": self.reminder.pk,
-                    "location": self.reminder.location,
-                    "notified_at": self.reminder.notified_at,
-                    "notify_at": self.reminder.notify_at,
+                    "description": reminder.description,
+                    "id": reminder.pk,
+                    "location": reminder.location,
+                    "notified_at": reminder.notified_at,
+                    "notify_at": reminder.notify_at,
                     "participants": [],
                     "status": ReminderStatus.CREATED.name,
-                    "title": self.reminder.title,
+                    "title": reminder.title,
                 },
             ],
         )
@@ -80,8 +82,11 @@ class Test(TestCase, ApiTestMixin, UserTestMixin):
         self.assertTrue(ReminderStatus.CREATED.name, reminder.status)
 
     def test_patch_anon(self):
+        reminder = Reminder(creator=self.user)
+        reminder.save()
+
         self.validate_response(
-            f"{self.endpoint}{self.reminder.pk}/",
+            f"{self.endpoint}{reminder.pk}/",
             method="patch",
             expected_status_code=status.HTTP_401_UNAUTHORIZED,
         )
@@ -112,62 +117,85 @@ class Test(TestCase, ApiTestMixin, UserTestMixin):
         self.assertEqual(rem.pk, reminder.pk)
 
     def test_patch_normal_readonly(self):
-        user2 = self.create_user()
+        reminder = Reminder(creator=self.user)
+        reminder.save()
+
         dtm = utcnow() - timedelta(days=1)
 
         dataset = {
             "created_at": dtm,
+            "creator": self.user2.pk,
             "notified_at": dtm,
-            "status": ReminderStatus.NOTIFIED.name,
-            "creator": user2.pk,
         }
 
-        old = {_f: getattr(self.reminder, _f) for _f in dataset}
+        old = {_f: getattr(reminder, _f) for _f in dataset}
 
         for field, value in dataset.items():
             self.validate_response(
-                f"{self.endpoint}{self.reminder.pk}/",
+                f"{self.endpoint}{reminder.pk}/",
                 method="patch",
                 headers=self.auth_headers,
                 data={field: value},
                 expected_status_code=status.HTTP_200_OK,
             )
 
-        self.reminder.refresh_from_db()
+        reminder.refresh_from_db()
 
         for field, expected_value in old.items():
-            self.assertEqual(expected_value, getattr(self.reminder, field), field)
+            self.assertEqual(expected_value, getattr(reminder, field), field)
 
-    def test_patch_not_own(self):
-        user2 = self.create_user()
-        rem = Reminder(creator=user2, title="xxx")
-        rem.save()
+    def test_patch_status(self):
+        reminder = Reminder(creator=self.user)
+        reminder.save()
 
         self.validate_response(
-            f"{self.endpoint}{rem.pk}/",
+            f"{self.endpoint}{reminder.pk}/",
+            method="patch",
+            headers=self.auth_headers,
+            data={"status": ReminderStatus.NOTIFIED.name},
+            expected_status_code=status.HTTP_400_BAD_REQUEST,
+        )
+
+        reminder.refresh_from_db()
+        self.assertEqual("CREATED", reminder.status)
+
+        self.validate_response(
+            f"{self.endpoint}{reminder.pk}/",
+            method="patch",
+            headers=self.auth_headers,
+            data={"status": ReminderStatus.DONE.name},
+            expected_status_code=status.HTTP_200_OK,
+        )
+
+        reminder.refresh_from_db()
+        self.assertEqual("DONE", reminder.status)
+
+    def test_patch_not_own(self):
+        self.validate_response(
+            f"{self.endpoint}{self.reminder2.pk}/",
             method="patch",
             headers=self.auth_headers,
             data={"title": "xxx"},
-            expected_status_code=status.HTTP_403_FORBIDDEN,
+            expected_status_code=status.HTTP_404_NOT_FOUND,
         )
 
     def test_delete_anon(self):
         self.validate_response(
-            f"{self.endpoint}{self.reminder.pk}/",
+            f"{self.endpoint}{self.reminder2.pk}/",
             method="delete",
             expected_status_code=status.HTTP_401_UNAUTHORIZED,
         )
 
     def test_delete_normal(self):
-        rem = Reminder(creator=self.user, title="xxx")
-        rem.save()
+        reminder = Reminder(creator=self.user)
+        reminder.save()
 
         self.validate_response(
-            f"{self.endpoint}{rem.pk}/",
+            f"{self.endpoint}{reminder.pk}/",
             method="delete",
             headers=self.auth_headers,
             expected_status_code=status.HTTP_204_NO_CONTENT,
         )
 
         with self.assertRaises(Reminder.DoesNotExist):
-            rem.refresh_from_db()
+            reminder.refresh_from_db()

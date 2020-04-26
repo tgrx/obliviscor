@@ -4,27 +4,27 @@ PYTHONPATH := ${HERE}/src
 TEST_PARAMS := --verbosity 2 --pythonpath ${PYTHONPATH}
 
 ifeq ($(origin PIPENV_ACTIVE), undefined)
-	PY := pipenv run
+	RUN := pipenv run
 endif
 
 DBCLIENT := $(shell which mysql) --user root --password
 ifeq ($(ENV_FOR_DYNACONF), travis)
 	DBCLIENT := $(shell which mysql) --user root
-	PY :=
+	RUN :=
 	TEST_PARAMS := --failfast --keepdb --verbosity 0 --pythonpath ${PYTHONPATH}
 else ifeq ($(ENV_FOR_DYNACONF), heroku)
 	# TODO: figure out what to do in that case
 	DBCLIENT :=
-	PY :=
+	RUN :=
 endif
 
-MANAGE := ${PY} python src/manage.py
+MANAGE := ${RUN} python src/manage.py
 
 
 .PHONY: format
 format:
-	${PY} isort --virtual-env ${VENV} --recursive --apply ${HERE}
-	${PY} black ${HERE}
+	${RUN} isort --virtual-env ${VENV} --recursive --apply ${HERE}
+	${RUN} black ${HERE}
 
 
 .PHONY: sh
@@ -34,7 +34,17 @@ sh:
 
 .PHONY: run
 run: static
-	${MANAGE} runserver
+	${MANAGE} runserver 0.0.0.0:8000
+
+
+.PHONY: spam
+spam:
+	PYTHONPATH=${PYTHONPATH} \
+	${RUN} celery worker \
+		--app periodic.app -B \
+		--config periodic.celeryconfig \
+		--workdir ${HERE}/src \
+		--loglevel=info
 
 
 .PHONY: static
@@ -74,19 +84,20 @@ token:
 .PHONY: test
 test:
 	ENV_FOR_DYNACONF=test \
-	${PY} coverage run \
+	${RUN} coverage run \
 		src/manage.py test ${TEST_PARAMS} \
 			applications \
+			periodic \
 			project \
 
-	${PY} coverage report
-	${PY} isort --virtual-env ${VENV} --recursive --check-only ${HERE}
-	${PY} black --check ${HERE}
+	${RUN} coverage report
+	${RUN} isort --virtual-env ${VENV} --recursive --check-only ${HERE}
+	${RUN} black --check ${HERE}
 
 
 .PHONY: report
 report:
-	${PY} coverage html --directory=${HERE}/htmlcov --fail-under=0
+	${RUN} coverage html --directory=${HERE}/htmlcov --fail-under=0
 	open "${HERE}/htmlcov/index.html"
 
 
@@ -97,7 +108,7 @@ venv:
 
 .PHONY: clean
 clean:
-	${PY} coverage erase
+	${RUN} coverage erase
 	rm -rf htmlcov
 	find . -type d -name "__pycache__" | xargs rm -rf
 	rm -rf ./.static/
