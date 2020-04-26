@@ -7,15 +7,14 @@ from dynaconf import settings
 _here = Path(__file__).parent.resolve()
 assert _here.is_dir(), f"invalid here dir: `{_here!r}`"
 
-_port = settings.PORT
 _reload = True
 _workers = multiprocessing.cpu_count() * 2 + 1  # XXX hahaha classic
 
-if settings.ENV_FOR_DYNACONF == "heroku":
-    _port = getenv("PORT")
-    assert _port and _port.isdecimal(), f"invalid port: `{_port!r}`"
-    _port = int(_port)
+_port = getenv("PORT")
+assert _port and _port.isdecimal(), f"invalid port: `{_port!r}`"
+_port = int(_port)
 
+if settings.ENV_FOR_DYNACONF == "heroku":
     _reload = False
 
     _workers = getenv("WEB_CONCURRENCY", "4")
