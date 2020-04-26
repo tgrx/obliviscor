@@ -2,6 +2,7 @@ from applications.reminders.utils.consts import ReminderStatus
 from periodic import tasks
 from periodic.app import app
 from periodic.utils.xmodels import get_reminder_model
+from project.utils.xdatetime import utcnow
 
 
 @app.task
@@ -33,6 +34,7 @@ def notify_single_reminder(reminder_id) -> None:  # pragma: no cover
 
     print(f"IN | {notify_single_reminder.__name__} | spam done")
 
+    reminder.notified_at = utcnow()
     reminder.status = ReminderStatus.NOTIFIED.name
     reminder.save()
 
