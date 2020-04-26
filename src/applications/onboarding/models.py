@@ -1,6 +1,5 @@
 from typing import Optional
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django.db import models
@@ -32,9 +31,8 @@ class AuthProfile(models.Model):
 
         domain = self.site.domain
         scheme = {"localhost": "http"}.get(domain, "https")
-        port = f":{settings.PORT}" if settings.PORT != 80 else ""
 
-        url = f"{scheme}://{domain}{port}{self.get_absolute_url()}"
+        url = f"{scheme}://{domain}{self.get_absolute_url()}"
 
         return url
 
