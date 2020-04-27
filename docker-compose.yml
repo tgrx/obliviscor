@@ -1,0 +1,51 @@
+version: "3.3"
+services:
+  obliviscor-web:
+    image: obliviscor-web
+    container_name: obliviscor-web
+    build: .
+    ports:
+      - "8000:80"
+    depends_on:
+      - obliviscor-db
+      - obliviscor-spam
+    environment:
+      ENV_FOR_DYNACONF: docker
+      PORT: 80
+  obliviscor-spam:
+    image: obliviscor-web
+    container_name: obliviscor-spam
+    build: .
+    ports:
+      - "8001:80"
+    depends_on:
+      - obliviscor-broker
+      - obliviscor-db
+    entrypoint: ["docker/run-spam.sh"]
+    environment:
+      ENV_FOR_DYNACONF: docker
+      PORT: 80
+  obliviscor-broker:
+    container_name: obliviscor-redis
+    image: redis:latest
+  obliviscor-db:
+    container_name: obliviscor-mysql
+    image: mysql:latest
+    restart: always
+    entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: obliviscor
+      MYSQL_USER: xxx
+      MYSQL_PASSWORD: xxx
+    ports:
+      - "3307:3306"
+  obliviscor-dba:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - db-data:/var/lib/mysql
+volumes:
+  db-data:

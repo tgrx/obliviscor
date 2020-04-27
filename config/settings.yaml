@@ -1,7 +1,7 @@
 default:
   ALLOWED_HOSTS: []
-  CELERY_BEAT_INVITATION: 0
-  CELERY_BEAT_NOTIFICATION: 0
+  CELERY_BEAT_INVITATION: -1
+  CELERY_BEAT_NOTIFICATION: -1
   CELERY_BROKER_URL: ""
   DATABASE_URL: ""
   EMAIL_FROM: ""
@@ -31,10 +31,17 @@ development:
   TIME_ZONE: "Europe/Minsk"
 
 
-production:
-  MODE_CACHING: 1
+docker:
+  CELERY_BEAT_INVITATION: 30
+  CELERY_BEAT_NOTIFICATION: 30
+  CELERY_BROKER_URL: "redis://obliviscor-broker"
+  DATABASE_URL: "mysql://xxx:xxx@obliviscor-db:3306/obliviscor"
+  MODE_CACHING: 0
   MODE_DEBUG: 0
   MODE_PROFILING: 0
+  SECRET_KEY: "1"
+  SITE_ID: 1
+  TIME_ZONE: "Europe/Minsk"
 
 
 heroku:

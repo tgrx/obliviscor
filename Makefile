@@ -113,3 +113,24 @@ clean:
 	find . -type d -name "__pycache__" | xargs rm -rf
 	rm -rf ./.static/
 
+
+.PHONY: clean-docker
+clean-docker:
+	docker ps --quiet --all | xargs docker stop || true
+	docker ps --quiet --all | xargs docker rm || true
+	docker volume ls --quiet | xargs docker volume rm || true
+	docker-compose rm --force || true
+
+
+.PHONY: wipe
+wipe: clean clean-docker
+
+
+.PHONY: docker
+docker: wipe
+	docker-compose build
+
+
+.PHONY: docker-run
+docker-run: docker
+	docker-compose up

@@ -1,3 +1,3 @@
 release: make migrate
-web: ./runserver_heroku.sh
+web: ./run-gunicorn.sh
 worker: make spam
