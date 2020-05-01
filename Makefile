@@ -27,11 +27,6 @@ format:
 	${RUN} black ${HERE}
 
 
-.PHONY: sh
-sh:
-	${MANAGE} shell
-
-
 .PHONY: run
 run: static
 	${MANAGE} runserver 0.0.0.0:8000
@@ -74,6 +69,11 @@ initdb: resetdb migrate
 .PHONY: su
 su:
 	${MANAGE} createsuperuser
+
+
+.PHONY: sh
+sh:
+	${MANAGE} shell
 
 
 .PHONY: token
